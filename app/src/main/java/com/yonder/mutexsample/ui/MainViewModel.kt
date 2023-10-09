@@ -74,9 +74,9 @@ class MainViewModel(private val dispatcher: CoroutineDispatcher) : ViewModel() {
                 val res2 = result2.await()
                 log("result1 => $res1")
                 log("result2 => $res2")
-                log("result with await together => ${res1 + res2}")
+                log("result parallel together => ${res1 + res2}")
             }
-            loge("after await time => $time1")
+            loge("parallel requests time => $time1")
 
             loge("starting sequential request")
             val time2 = measureTimeMillis {
@@ -84,9 +84,9 @@ class MainViewModel(private val dispatcher: CoroutineDispatcher) : ViewModel() {
                 val result4 = makeApiCall(3)
                 log("result3 => $result3")
                 log("result4 => $result4")
-                log("result normal together => ${result3 + result4} ")
+                log("result sequential together => ${result3 + result4} ")
             }
-            loge("after normal time => $time2")
+            loge("sequential request time => $time2")
         }
     }
 
