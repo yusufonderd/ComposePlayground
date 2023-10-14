@@ -27,6 +27,8 @@ fun HomeProductsScreen(
     onAddToCart: () -> Unit,
     onRemoveFromCart: () -> Unit
 ) {
+    val products = uiState.products
+
     Column(
         modifier = Modifier
             .padding(16.dp)
@@ -38,7 +40,7 @@ fun HomeProductsScreen(
 
         LinearProgress(isLoading = uiState.shouldShowProgress)
 
-        HugeCenteredText(text = stringResource(R.string.added_products, uiState.products.size))
+        HugeCenteredText(text = stringResource(R.string.added_products, uiState.productSize))
 
         Column(
             verticalArrangement = Arrangement.spacedBy(16.dp),
@@ -66,7 +68,6 @@ fun HomeProductsScreen(
             modifier = Modifier.fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            val products = uiState.products
             itemsIndexed(products) { index, product ->
                 ProductListItem(
                     product = product,

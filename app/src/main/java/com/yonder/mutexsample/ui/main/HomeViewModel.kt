@@ -144,6 +144,7 @@ sealed interface HomeUiState {
     ) : HomeUiState {
         val isRemoveFromCartButtonEnabled: Boolean get() = products.isNotEmpty() && shouldShowProgress.not()
         val isAddToCartButtonEnabled: Boolean get() = shouldShowProgress.not()
+        val productSize: Int get() = products.size
     }
 }
 
