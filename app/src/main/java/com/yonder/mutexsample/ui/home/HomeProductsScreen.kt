@@ -1,4 +1,4 @@
-package com.yonder.mutexsample.ui.main
+package com.yonder.mutexsample.ui.home
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -14,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.yonder.mutexsample.R
@@ -50,7 +51,10 @@ fun HomeProductsScreen(
             Button(
                 onClick = onAddToCart,
                 enabled = uiState.isAddToCartButtonEnabled,
-                colors = ButtonDefaults.buttonColors(containerColor = Color.Green)
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = colorResource(id = R.color.green),
+                    contentColor = Color.White
+                )
             ) {
                 StandardText(text = stringResource(id = R.string.add_to_cart))
             }
@@ -58,7 +62,10 @@ fun HomeProductsScreen(
             Button(
                 onClick = onRemoveFromCart,
                 enabled = uiState.isRemoveFromCartButtonEnabled,
-                colors = ButtonDefaults.buttonColors(containerColor = Color.Red)
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = colorResource(id = R.color.red),
+                    contentColor = Color.White
+                )
             ) {
                 StandardText(text = stringResource(id = R.string.remove_from_cart))
             }

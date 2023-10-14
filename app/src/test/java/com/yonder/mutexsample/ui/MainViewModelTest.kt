@@ -1,7 +1,7 @@
 package com.yonder.mutexsample.ui
 
 import com.yonder.mutexsample.MainDispatcherRule
-import com.yonder.mutexsample.ui.main.HomeViewModel
+import com.yonder.mutexsample.ui.home.HomeViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest

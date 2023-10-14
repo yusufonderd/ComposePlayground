@@ -7,8 +7,8 @@ import androidx.compose.runtime.getValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.yonder.mutexsample.ui.main.HomeScreen
-import com.yonder.mutexsample.ui.main.HomeViewModel
+import com.yonder.mutexsample.ui.home.HomeScreen
+import com.yonder.mutexsample.ui.home.HomeViewModel
 import com.yonder.mutexsample.ui.theme.MutexSampleTheme
 import kotlinx.coroutines.Dispatchers
 

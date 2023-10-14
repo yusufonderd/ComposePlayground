@@ -1,4 +1,4 @@
-package com.yonder.mutexsample.ui.main
+package com.yonder.mutexsample.ui.home
 
 import android.util.Log
 import androidx.annotation.VisibleForTesting

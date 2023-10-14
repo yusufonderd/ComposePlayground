@@ -1,4 +1,4 @@
-package com.yonder.mutexsample.ui.main
+package com.yonder.mutexsample.ui.home
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -19,7 +19,7 @@ import com.yonder.mutexsample.ui.theme.MutexSampleTheme
 fun ProductListItem(product: Product, index: Int, modifier: Modifier = Modifier) {
     Row(
         modifier = modifier,
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        horizontalArrangement = Arrangement.spacedBy(16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         HeaderText("$index")

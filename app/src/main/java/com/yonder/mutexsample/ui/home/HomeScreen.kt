@@ -1,4 +1,4 @@
-package com.yonder.mutexsample.ui.main
+package com.yonder.mutexsample.ui.home
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
