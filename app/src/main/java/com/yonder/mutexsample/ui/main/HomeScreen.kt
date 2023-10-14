@@ -1,33 +1,31 @@
-package com.yonder.mutexsample.ui
+package com.yonder.mutexsample.ui.main
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Divider
-import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.yonder.mutexsample.ui.theme.MutexSampleTheme
+import com.yonder.mutexsample.R
+import com.yonder.mutexsample.ui.custom.HugeCenteredText
+import com.yonder.mutexsample.ui.custom.LinearProgressIndicatorView
+import com.yonder.mutexsample.ui.custom.StandardText
 
 @Composable
-fun MainScreen(
-    uiState: MainViewModel.UiState,
+fun HomeScreen(
+    uiState: HomeViewModel.UiState,
     onAddToCart: () -> Unit,
     onRemoveFromCart: () -> Unit,
 ) {
@@ -47,26 +45,27 @@ fun MainScreen(
 
             LinearProgressIndicatorView(isLoading = uiState.isLoading)
 
-            Text(
-                text = "Eklenen ürün: ${uiState.products.size}",
-                style = MaterialTheme.typography.displaySmall,
-                textAlign = TextAlign.Center
-            )
+            HugeCenteredText(text = stringResource(R.string.added_products, uiState.products.size))
 
-            Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+            Column(
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
 
                 Button(
                     onClick = onAddToCart,
+                    enabled = uiState.isLoading.not(),
                     colors = ButtonDefaults.buttonColors(containerColor = Color.Green)
                 ) {
-                    Text(text = "Add To Cart")
+                    StandardText(text = stringResource(id = R.string.add_to_cart))
                 }
 
                 Button(
                     onClick = onRemoveFromCart,
+                    enabled = uiState.isLoading.not() && uiState.products.isNotEmpty(),
                     colors = ButtonDefaults.buttonColors(containerColor = Color.Red)
                 ) {
-                    Text(text = "Remove From Cart")
+                    StandardText(text = stringResource(id = R.string.remove_from_cart))
                 }
 
             }
@@ -74,8 +73,14 @@ fun MainScreen(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                items(uiState.products) { productId ->
-                    Greeting(name = productId, modifier = Modifier.padding(12.dp))
+                itemsIndexed(uiState.products) { index, productId ->
+                    ProductItem(
+                        productId = productId,
+                        index = index.inc(),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(12.dp)
+                    )
                     Divider()
                 }
             }
@@ -83,43 +88,3 @@ fun MainScreen(
     }
 }
 
-
-@Composable
-fun LinearProgressIndicatorView(
-    isLoading: Boolean, modifier: Modifier = Modifier
-) {
-    LinearProgressIndicator(
-        modifier = modifier.alpha(
-            if (isLoading) {
-                1f
-            } else {
-                0f
-            }
-        )
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun LinearProgressIndicatorViewPreview() {
-    MutexSampleTheme {
-        LinearProgressIndicatorView(true)
-    }
-}
-
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Column(modifier = modifier) {
-        Text(text = "Hello!")
-        Text(text = name)
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    MutexSampleTheme {
-        Greeting(name = "Android", modifier = Modifier.padding(12.dp))
-    }
-}

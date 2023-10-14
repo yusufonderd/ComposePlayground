@@ -1,6 +1,7 @@
 package com.yonder.mutexsample.ui
 
 import com.yonder.mutexsample.MainDispatcherRule
+import com.yonder.mutexsample.ui.main.HomeViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
@@ -22,7 +23,7 @@ class MainViewModelTest {
     @Test
     fun `should call addToCart function multiple times`() = runTest {
 
-        val viewModel = MainViewModel(mainDispatcherRule.testDispatcher)
+        val viewModel = HomeViewModel(mainDispatcherRule.testDispatcher)
         repeat(ADD_TIMES){
             viewModel.addToCart()
         }

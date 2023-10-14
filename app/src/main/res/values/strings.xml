@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">MutexSample</string>
+
+    <string name="added_products">Products size: %d</string>
+    <string name="add_to_cart">Add To Cart</string>
+    <string name="remove_from_cart">Remove From Cart</string>
+
 </resources>

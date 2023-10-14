@@ -1,6 +1,7 @@
-package com.yonder.mutexsample.ui
+package com.yonder.mutexsample.ui.main
 
 import android.util.Log
+import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.CoroutineDispatcher
@@ -16,9 +17,9 @@ import java.util.UUID
 import kotlin.system.measureTimeMillis
 import kotlin.time.Duration.Companion.seconds
 
-class MainViewModel(private val dispatcher: CoroutineDispatcher) : ViewModel() {
+class HomeViewModel(private val dispatcher: CoroutineDispatcher) : ViewModel() {
 
-    private val tag = MainViewModel::class.java.simpleName
+    private val tag = HomeViewModel::class.java.simpleName
 
     private val _uiState = MutableStateFlow(UiState())
     val uiState: StateFlow<UiState> get() = _uiState
@@ -28,7 +29,16 @@ class MainViewModel(private val dispatcher: CoroutineDispatcher) : ViewModel() {
     private val mutex = Mutex()
 
     init {
-        startParallelRequests()
+        fetchProducts()
+    }
+
+    @VisibleForTesting
+    fun fetchProducts() {
+        setLoading()
+        viewModelScope.launch(dispatcher) {
+            val products = getProductsFromApi()
+            _uiState.update { it.copy(products = products.toMutableList(), isLoading = false) }
+        }
     }
 
     fun addToCart() {
@@ -90,9 +100,16 @@ class MainViewModel(private val dispatcher: CoroutineDispatcher) : ViewModel() {
         }
     }
 
-    private suspend fun makeApiCall(second: Int = 1): String {
+    private suspend fun makeApiCall(second: Int = 1) = run {
         delay(second.seconds)
-        return UUID.randomUUID().toString()
+        generateRandomProductId()
+    }
+
+    private fun generateRandomProductId() = UUID.randomUUID().toString().take(n = 8)
+
+    private suspend fun getProductsFromApi(productCount: Int = 3): List<String> {
+        delay(1.seconds)
+        return (1..productCount).map { generateRandomProductId() }
     }
 
     data class UiState(
