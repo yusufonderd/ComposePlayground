@@ -16,7 +16,7 @@ import com.yonder.mutexsample.ui.theme.MutexSampleTheme
 
 
 @Composable
-fun ProductItem(productId: String, index: Int, modifier: Modifier = Modifier) {
+fun ProductListItem(product: Product, index: Int, modifier: Modifier = Modifier) {
     Row(
         modifier = modifier,
         horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -28,7 +28,7 @@ fun ProductItem(productId: String, index: Int, modifier: Modifier = Modifier) {
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             StandardText(text = "Hello")
-            StandardText(text = productId)
+            StandardText(text = product.id)
         }
     }
 }
@@ -37,8 +37,8 @@ fun ProductItem(productId: String, index: Int, modifier: Modifier = Modifier) {
 @Composable
 fun ProductItemPreview() {
     MutexSampleTheme {
-        ProductItem(
-            productId = "Android",
+        ProductListItem(
+            product = Product("Android"),
             index = 1,
             modifier = Modifier
                 .fillMaxWidth()

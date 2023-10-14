@@ -8,7 +8,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.yonder.mutexsample.ui.theme.MutexSampleTheme
 
 @Composable
-fun LinearProgressIndicatorView(
+fun LinearProgress(
     isLoading: Boolean, modifier: Modifier = Modifier
 ) {
     LinearProgressIndicator(
@@ -24,8 +24,8 @@ fun LinearProgressIndicatorView(
 
 @Preview(showBackground = true)
 @Composable
-fun LinearProgressIndicatorViewPreview() {
+fun LinearProgressPreview() {
     MutexSampleTheme {
-        LinearProgressIndicatorView(true)
+        LinearProgress(true)
     }
 }

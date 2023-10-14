@@ -21,10 +21,11 @@ class HomeViewModel(private val dispatcher: CoroutineDispatcher) : ViewModel() {
 
     private val tag = HomeViewModel::class.java.simpleName
 
-    private val _uiState = MutableStateFlow(UiState())
-    val uiState: StateFlow<UiState> get() = _uiState
+    private val _uiState: MutableStateFlow<HomeUiState> = MutableStateFlow(HomeUiState.Loading)
+    val uiState: StateFlow<HomeUiState> get() = _uiState
 
-    private val currentUiState: UiState get() = uiState.value
+    private val successState: HomeUiState.Success
+        get() = uiState.value as? HomeUiState.Success ?: error("must access in Success state")
 
     private val mutex = Mutex()
 
@@ -34,10 +35,15 @@ class HomeViewModel(private val dispatcher: CoroutineDispatcher) : ViewModel() {
 
     @VisibleForTesting
     fun fetchProducts() {
-        setLoading()
+        _uiState.update { HomeUiState.Loading }
         viewModelScope.launch(dispatcher) {
             val products = getProductsFromApi()
-            _uiState.update { it.copy(products = products.toMutableList(), isLoading = false) }
+            _uiState.update {
+                HomeUiState.Success(
+                    products = products,
+                    shouldShowProgress = false
+                )
+            }
         }
     }
 
@@ -47,11 +53,12 @@ class HomeViewModel(private val dispatcher: CoroutineDispatcher) : ViewModel() {
         viewModelScope.launch(dispatcher) {
             mutex.withLock {
                 val productId = makeApiCall()
-                _uiState.update { state ->
-                    state.products.add(productId)
-                    state.copy(
-                        products = state.products,
-                        isLoading = false
+                val newProducts = successState.products
+                newProducts.add(Product(productId))
+                _uiState.update {
+                    HomeUiState.Success(
+                        products = newProducts,
+                        shouldShowProgress = false
                     )
                 }
             }
@@ -64,14 +71,25 @@ class HomeViewModel(private val dispatcher: CoroutineDispatcher) : ViewModel() {
         viewModelScope.launch(dispatcher) {
             mutex.withLock {
                 delay(1.seconds)
-                currentUiState.products.removeLastOrNull()
-                _uiState.update { it.copy(isLoading = false) }
+                val newProducts = successState.products
+                newProducts.removeLastOrNull()
+                _uiState.update {
+                    HomeUiState.Success(
+                        products = newProducts,
+                        shouldShowProgress = false
+                    )
+                }
             }
         }
     }
 
     private fun setLoading() {
-        _uiState.update { it.copy(isLoading = true) }
+        _uiState.update {
+            HomeUiState.Success(
+                products = successState.products,
+                shouldShowProgress = true
+            )
+        }
     }
 
     private fun startParallelRequests() {
@@ -107,19 +125,27 @@ class HomeViewModel(private val dispatcher: CoroutineDispatcher) : ViewModel() {
 
     private fun generateRandomProductId() = UUID.randomUUID().toString().take(n = 8)
 
-    private suspend fun getProductsFromApi(productCount: Int = 3): List<String> {
+    private suspend fun getProductsFromApi(productCount: Int = 3): MutableList<Product> {
         delay(1.seconds)
-        return (1..productCount).map { generateRandomProductId() }
+        return (1..productCount).map { Product(id = generateRandomProductId()) }.toMutableList()
     }
-
-    data class UiState(
-        val products: MutableList<String> = mutableListOf(),
-        val isLoading: Boolean = false
-    )
 
     private fun log(message: String) = Log.i(tag, message)
 
     private fun loge(message: String) = Log.e(tag, message)
 
 }
+
+sealed interface HomeUiState {
+    data object Loading : HomeUiState
+    data class Success(
+        val products: MutableList<Product>,
+        val shouldShowProgress: Boolean
+    ) : HomeUiState {
+        val isRemoveFromCartButtonEnabled: Boolean get() = products.isNotEmpty() && shouldShowProgress.not()
+        val isAddToCartButtonEnabled: Boolean get() = shouldShowProgress.not()
+    }
+}
+
+data class Product(val id: String)
 

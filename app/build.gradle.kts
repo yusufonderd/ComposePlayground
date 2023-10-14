@@ -75,6 +75,7 @@ dependencies {
     implementation("androidx.compose.foundation:foundation")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
 
+    implementation("androidx.compose.foundation:foundation-layout")
     implementation("androidx.lifecycle:lifecycle-runtime-compose:2.6.2")
 
 
